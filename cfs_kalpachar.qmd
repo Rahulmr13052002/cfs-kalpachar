@@ -1,0 +1,249 @@
+---
+title: "Cash Flow Statement"
+author: "Shwetha Ragothaman"
+format: dashboard
+params:
+  opg_bal: 24265515
+execute:
+  warning: false
+  message: false
+  echo: false
+---
+
+```{r}
+#| label: load_libraries
+#| include: false
+
+library(DBI)
+library(RMySQL)
+library(stringr)
+library(lubridate)
+library(tidyr)
+library(dplyr)
+library(knitr)
+library(reactable)
+library(readxl)
+
+```
+
+```{r}
+#| warning: false
+#| include: false
+#| label: db_connection
+
+# Connect to MySQL: 
+con <- dbConnect(
+  RMySQL :: MySQL(),
+  user = "shwetha",
+  password = "Zukti@2025",
+  dbname = "tally_kalpachar",
+  host = "49.206.25.216",
+  port = 3306
+)
+
+mapping <- read_excel("LedgerMapping.xlsx", sheet = "Ledger Mapping")
+
+```
+
+```{r}
+#| warning: FALSE
+#| label: load_data
+
+daybook <- dbGetQuery(con, 
+                      "SELECT *, credit_amount - debit_amount AS net_amount, '2025-26' as FY 
+                      FROM vw_daybook_detailed WHERE date >= '2025-04-01'AND
+                      voucher_type IN ('Payment_New','Receipt_New','Contra_New') ;")
+
+
+```
+
+
+```{r}
+week_start_thu <- function(x) { x - ((wday(x, week_start = 1) - 4) %% 7) } 
+week_label <- function(x) {
+  start <- week_start_thu(x) 
+  end <- start + days(6) 
+  paste0(format(start, "%d %b"), " – ", format(end, "%d %b"))
+} 
+
+df <- daybook %>% 
+  mutate( Date = as.Date(date), 
+          week_label = week_label(Date)
+          )
+
+df <- df %>% left_join(mapping, by = "ledger_name")
+
+# Summarize including CAPEX/OPEX group
+pivot_data <- df %>%
+  group_by(type, sub_type, week_label) %>%
+  summarise(net_amount = sum(net_amount, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = week_label,
+    values_from = net_amount,
+    values_fill = 0
+  ) %>%
+  mutate(
+    Total = rowSums(across(!c(type, sub_type)), na.rm = TRUE)
+  ) %>%
+  rename(
+    Category = type,
+    Name = sub_type
+  )
+
+# Total row
+total_row <- pivot_data %>%
+  summarise(across(where(is.numeric), ~ sum(.x, na.rm = TRUE))) %>%
+  mutate(Category = "Total", Name = "Total")
+
+pivot_data <- bind_rows(pivot_data, total_row)
+
+```
+
+# CFS
+
+```{r}
+library(gt)
+library(dplyr)
+library(readr)
+library(scales)
+
+
+pivot_data_clean <- pivot_data %>%
+  mutate(
+    Category = ifelse(is.na(Category) | Category == "", "Uncategorized", Category)
+  ) %>%
+  filter(!(Category == "Total" & Name == "Total"))
+
+
+week_cols <- pivot_data_clean %>%
+  select(-Category, -Name) %>%
+  colnames()
+
+week_cols <- setdiff(week_cols, "Total")
+
+
+pivot_data_clean <- pivot_data_clean %>%
+  mutate(across(all_of(week_cols), ~ parse_number(as.character(.x))))
+
+category_totals <- pivot_data_clean %>%
+  group_by(Category) %>%
+  summarise(
+    across(all_of(week_cols), sum, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Total = rowSums(across(all_of(week_cols)), na.rm = TRUE),
+    Name  = "Category Total"
+  )
+
+
+grand_total <- category_totals %>%
+  summarise(
+    across(all_of(c(week_cols, "Total")), sum, na.rm = TRUE)
+  ) %>%
+  mutate(
+    Category = "Grand Total",
+    Name     = "Grand Total"
+  )
+
+
+final_data <- bind_rows(
+  pivot_data_clean,
+  category_totals,
+  grand_total
+)
+
+
+final_data %>%
+  gt(groupname_col = "Category", rowname_col = "Name") %>%
+  
+  # Number formatting
+  fmt_number(
+    columns  = all_of(c(week_cols, "Total")),
+    decimals = 0,
+    use_seps = TRUE
+  ) %>%
+  
+  cols_label(
+    Name  = "Particulars",
+    Total = "Total"
+  ) %>%
+  
+  cols_align("center", all_of(c(week_cols, "Total"))) %>%
+  cols_align("left", Name) %>%
+  
+  
+  tab_header(
+    title    = md("**Cash Flow Statement**"),
+    subtitle = md("Weekly Cash Movement")
+  ) %>%
+  
+  tab_style(
+    style = list(
+      cell_fill(color = "#c2d1e5ff"),
+      cell_text(weight = "bold", size = px(16))
+    ),
+    locations = cells_title(groups = "title")
+  ) %>%
+  
+  tab_style(
+    style = list(
+      cell_fill(color = "#c2d1e5ff"),
+      cell_text(size = px(12))
+    ),
+    locations = cells_title(groups = "subtitle")
+  ) %>%
+  
+  
+  tab_style(
+    style = list(
+      cell_fill(color = "#f4f4f5ff"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_column_labels(columns = all_of(c(week_cols, "Total")))
+  ) %>%
+  
+  
+  tab_style(
+    style = list(
+      cell_fill(color = "#eef6ff"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_group()
+  ) %>%
+  
+  
+  tab_style(
+    style = cell_text(indent = px(20)),
+    locations = cells_body(
+      rows = !Name %in% c("Category Total", "Grand Total")
+    )
+  ) %>%
+  
+  
+  tab_style(
+    style = list(
+      cell_fill(color = "#e5e9d9ff"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(rows = Name == "Category Total")
+  ) %>%
+  
+  
+  tab_style(
+    style = list(
+      cell_fill(color = "#e9f2ff"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(rows = Name == "Grand Total")
+  ) %>%
+  
+  
+  tab_options(
+    table.width      = pct(100),
+    table.font.size  = px(12),
+    data_row.padding = px(5)
+  )
+
+```
+

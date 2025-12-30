@@ -1,0 +1,126 @@
+---
+title: "Cash Flow Statement"
+author: "Shwetha Ragothaman"
+format: dashboard
+params:
+  opg_bal: 24265515
+execute:
+  warning: false
+  message: false
+  echo: false
+---
+
+```{r}
+#| label: load_libraries
+#| include: false
+
+library(DBI)
+library(RMySQL)
+library(stringr)
+library(lubridate)
+library(tidyr)
+library(dplyr)
+library(knitr)
+library(reactable)
+library(readxl)
+
+```
+
+```{r}
+#| warning: false
+#| include: false
+#| label: db_connection
+
+# Connect to MySQL: 
+con <- dbConnect(
+  RMySQL :: MySQL(),
+  user = "shwetha",
+  password = "Zukti@2025",
+  dbname = "tally_kalpachar",
+  host = "49.206.25.216",
+  port = 3306
+)
+
+mapping <- read_excel("LedgerMapping.xlsx", sheet = "Ledger Mapping")
+
+```
+
+```{r}
+#| warning: FALSE
+#| label: load_data
+
+daybook <- dbGetQuery(con, 
+                      "SELECT *, credit_amount - debit_amount AS net_amount, '2025-26' as FY 
+                      FROM vw_daybook_detailed WHERE date >= '2025-04-01'AND
+                      voucher_type IN ('Payment_New','Receipt_New','Contra_New') ;")
+
+
+```
+
+
+```{r}
+week_start_thu <- function(x) { x - ((wday(x, week_start = 1) - 4) %% 7) } 
+week_label <- function(x) {
+  start <- week_start_thu(x) 
+  end <- start + days(6) 
+  paste0(format(start, "%d %b"), " – ", format(end, "%d %b"))
+} 
+
+df <- daybook %>% 
+  mutate( Date = as.Date(date), 
+          week_label = week_label(Date)
+          )
+
+df <- df %>% left_join(mapping, by = "ledger_name")
+
+# Summarize including CAPEX/OPEX group
+pivot_data <- df %>%
+  group_by(type, sub_type, week_label) %>%
+  summarise(net_amount = sum(net_amount, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = week_label,
+    values_from = net_amount,
+    values_fill = 0
+  ) %>%
+  mutate(
+    Total = rowSums(across(!c(type, sub_type)), na.rm = TRUE)
+  ) %>%
+  rename(
+    Category = type,
+    Name = sub_type
+  )
+
+# Total row
+total_row <- pivot_data %>%
+  summarise(across(where(is.numeric), ~ sum(.x, na.rm = TRUE))) %>%
+  mutate(Category = "Total", Name = "Total")
+
+pivot_data <- bind_rows(pivot_data, total_row)
+
+```
+
+# CFS
+
+```{r}
+#| width: 100%
+
+reactable(
+  pivot_data,
+  groupBy = "Category",
+  fullWidth = TRUE,
+  filterable = TRUE,
+  highlight = TRUE,
+  bordered = TRUE,
+  wrap = FALSE,
+  defaultColDef = colDef(
+  align = "center",
+  format = colFormat(separators = TRUE, digits = 0)
+  ),
+  style = list(width = "100%"),           
+  pagination = FALSE,                     
+  height = "auto",
+  class = "table-responsive"
+)
+
+```
+
