@@ -247,3 +247,199 @@ final_data %>%
 
 ```
 
+# CFS 2
+
+```{r}
+#| width: 100%
+library(reactable)
+library(dplyr)
+library(scales)
+library(htmltools)
+library(htmlwidgets)
+
+# ---- Data preparation ----
+pivot_data_clean <- pivot_data %>%
+  mutate(
+    Category = ifelse(is.na(Category) | Category == "", "Uncategorized", Category)
+  ) %>%
+  filter(!(Category == "Total" & Name == "Total"))
+
+week_cols <- setdiff(colnames(pivot_data_clean), c("Category", "Name", "Total"))
+
+pivot_data_clean <- pivot_data_clean %>%
+  mutate(across(all_of(week_cols), as.numeric))
+
+category_totals <- pivot_data_clean %>%
+  group_by(Category) %>%
+  summarise(across(all_of(week_cols), sum, na.rm = TRUE), .groups = "drop") %>%
+  mutate(
+    Total = rowSums(across(all_of(week_cols)), na.rm = TRUE),
+    Name = "Category Total"
+  )
+
+grand_total <- category_totals %>%
+  summarise(across(all_of(c(week_cols, "Total")), sum, na.rm = TRUE)) %>%
+  mutate(
+    Category = "Grand Total",
+    Name = "Grand Total"
+  )
+
+final_data <- bind_rows(
+  pivot_data_clean,
+  category_totals,
+  grand_total
+)
+
+# ---- Reactable with JS to expand groups ----
+htmlwidgets::onRender(
+  reactable(
+    final_data,
+    groupBy = "Category",
+    bordered = TRUE,
+    striped = FALSE,
+    highlight = TRUE,
+    filterable = TRUE,  # enable filters
+    defaultColDef = colDef(align = "center"),
+
+    columns = c(
+      list(
+        Name = colDef(
+          name = "Particulars",
+          align = "left",
+          filterable = TRUE,
+          cell = function(value) {
+            if (value %in% c("Category Total", "Grand Total")) {
+              tags$b(value)
+            } else {
+              tags$div(style = "padding-left:20px;", value)
+            }
+          }
+        )
+      ),
+      lapply(
+        setNames(week_cols, week_cols),
+        function(col)
+          colDef(
+            format = colFormat(separators = TRUE, digits = 0),
+            filterable = TRUE
+          )
+      ),
+      list(
+        Total = colDef(
+          format = colFormat(separators = TRUE, digits = 0),
+          filterable = TRUE
+        )
+      )
+    ),
+
+    rowStyle = function(index) {
+      if (index > nrow(final_data)) return(NULL)
+      row <- final_data[index, ]
+      if (is.na(row$Name)) return(NULL)
+
+      if (row$Name == "Category Total") {
+        list(background = "#e5e9d9ff", fontWeight = "bold")
+      } else if (row$Name == "Grand Total") {
+        list(background = "#e9f2ff", fontWeight = "bold")
+      } else {
+        NULL
+      }
+    },
+
+    theme = reactableTheme(
+      style = list(fontSize = "12px"),
+      headerStyle = list(
+        backgroundColor = "#f4f4f5ff",
+        fontWeight = "bold"
+      ),
+      groupHeaderStyle = list(
+        backgroundColor = "#eef6ff",
+        fontWeight = "bold"
+      )
+    )
+  ),
+  JS("
+function(el) {
+
+  // ---- ADD HEADER ABOVE TABLE ----
+  const header = document.createElement('div');
+  header.innerHTML = `
+    <div style=\"
+      background-color:#c2d1e5ff;
+      text-align:center;
+      padding:6px 10px;
+      margin-bottom:4px;
+      border-radius:6px;
+      line-height:1.05;
+    \">
+      <div style=\"
+        font-weight:bold;
+        font-size:17px;
+        margin:0;
+      \">
+        Cash Flow Statement
+      </div>
+      <div style=\"
+        font-size:11px;
+        margin:0;
+      \">
+        Weekly Cash Movement
+      </div>
+    </div>
+  `;
+  el.parentNode.insertBefore(header, el);
+
+  // ---- ROBUST EXPAND-ALL LOGIC ----
+  let attempts = 0;
+  const maxAttempts = 20;
+
+  const interval = setInterval(() => {
+    const buttons = el.querySelectorAll(
+      '.rt-group-header button[aria-expanded=\"false\"]'
+    );
+
+    if (buttons.length > 0) {
+      buttons.forEach(btn => btn.click());
+      clearInterval(interval); // ✅ STOP once expanded
+    }
+
+    attempts++;
+    if (attempts >= maxAttempts) {
+      clearInterval(interval); // safety stop
+    }
+  }, 100);
+
+  // ---- RE-EXPAND AFTER FILTER / SEARCH ----
+  const observer = new MutationObserver(() => {
+    let retry = 0;
+    const refire = setInterval(() => {
+      const buttons = el.querySelectorAll(
+        '.rt-group-header button[aria-expanded=\"false\"]'
+      );
+
+      if (buttons.length > 0) {
+        buttons.forEach(btn => btn.click());
+        clearInterval(refire);
+      }
+
+      retry++;
+      if (retry > 10) clearInterval(refire);
+    }, 100);
+  });
+
+  observer.observe(el, {
+    childList: true,
+    subtree: true
+  });
+
+  // ---- REMOVE EXTRA TOP SPACE ----
+  el.style.marginTop = '0';
+  el.style.paddingTop = '0';
+}
+")
+
+
+
+)
+
+```

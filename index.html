@@ -48,6 +48,22 @@ ul.task-list li input[type="checkbox"] {
 <script src="index_files/libs/quarto-dashboard/web-components.js" type="module"></script>
 <script src="index_files/libs/quarto-dashboard/components.js"></script>
 
+<script src="index_files/libs/core-js-2.5.3/shim.min.js"></script>
+
+<script src="index_files/libs/react-18.2.0/react.min.js"></script>
+
+<script src="index_files/libs/react-18.2.0/react-dom.min.js"></script>
+
+<script src="index_files/libs/reactwidget-2.0.0/react-tools.js"></script>
+
+<link href="index_files/libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+
+<script src="index_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<link href="index_files/libs/reactable-0.4.5/reactable.css" rel="stylesheet">
+
+<script src="index_files/libs/reactable-binding-0.4.5/reactable.js"></script>
+
 
 
 </head>
@@ -71,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
         <div class="navbar-author">Shwetha Ragothaman</div>
       </div>
     </div>
-<div id="dashboard-collapse" class="navbar-collapse collapse"><ul class="navbar-nav navbar-nav-scroll me-auto" role="tablist"><li class="nav-item" role="presentation"><a id="tab-cfs" class="nav-link active" data-bs-toggle="tab" role="tab" data-bs-target="#cfs" data-scrolling="false" href="#cfs" aria-controls="cfs" aria-selected="true"><span class="nav-link-text">CFS</span></a></li></ul></div></div>
+<div id="dashboard-collapse" class="navbar-collapse collapse"><ul class="navbar-nav navbar-nav-scroll me-auto" role="tablist"><li class="nav-item" role="presentation"><a id="tab-cfs" class="nav-link active" data-bs-toggle="tab" role="tab" data-bs-target="#cfs" data-scrolling="false" href="#cfs" aria-controls="cfs" aria-selected="true"><span class="nav-link-text">CFS</span></a></li><li class="nav-item" role="presentation"><a id="tab-cfs-2" class="nav-link" data-bs-toggle="tab" role="tab" data-bs-target="#cfs-2" data-scrolling="false" href="#cfs-2" aria-controls="cfs-2" aria-selected="false"><span class="nav-link-text">CFS 2</span></a></li></ul></div></div>
 </nav>
 </header>
 <div class="page-layout-custom quarto-dashboard-content bslib-gap-spacing html-fill-container bslib-page-fill quarto-dashboard-pages">  
@@ -82,23 +98,23 @@ ul.task-list li input[type="checkbox"] {
 <div class="card cell html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
 <div class="cell-output-display html-fill-item html-fill-container">
-<div id="fnsiqrrvfd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;" class="html-fill-item html-fill-container">
-<style>#fnsiqrrvfd table {
+<div id="vqttbszcqi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;" class="html-fill-item html-fill-container">
+<style>#vqttbszcqi table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#fnsiqrrvfd thead, #fnsiqrrvfd tbody, #fnsiqrrvfd tfoot, #fnsiqrrvfd tr, #fnsiqrrvfd td, #fnsiqrrvfd th {
+#vqttbszcqi thead, #vqttbszcqi tbody, #vqttbszcqi tfoot, #vqttbszcqi tr, #vqttbszcqi td, #vqttbszcqi th {
   border-style: none;
 }
 
-#fnsiqrrvfd p {
+#vqttbszcqi p {
   margin: 0;
   padding: 0;
 }
 
-#fnsiqrrvfd .gt_table {
+#vqttbszcqi .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -124,12 +140,12 @@ ul.task-list li input[type="checkbox"] {
   border-left-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_caption {
+#vqttbszcqi .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#fnsiqrrvfd .gt_title {
+#vqttbszcqi .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -141,7 +157,7 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-width: 0;
 }
 
-#fnsiqrrvfd .gt_subtitle {
+#vqttbszcqi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -153,7 +169,7 @@ ul.task-list li input[type="checkbox"] {
   border-top-width: 0;
 }
 
-#fnsiqrrvfd .gt_heading {
+#vqttbszcqi .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -165,13 +181,13 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_bottom_border {
+#vqttbszcqi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_col_headings {
+#vqttbszcqi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -186,7 +202,7 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_col_heading {
+#vqttbszcqi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -206,7 +222,7 @@ ul.task-list li input[type="checkbox"] {
   overflow-x: hidden;
 }
 
-#fnsiqrrvfd .gt_column_spanner_outer {
+#vqttbszcqi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -218,15 +234,15 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 4px;
 }
 
-#fnsiqrrvfd .gt_column_spanner_outer:first-child {
+#vqttbszcqi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fnsiqrrvfd .gt_column_spanner_outer:last-child {
+#vqttbszcqi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fnsiqrrvfd .gt_column_spanner {
+#vqttbszcqi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -238,11 +254,11 @@ ul.task-list li input[type="checkbox"] {
   width: 100%;
 }
 
-#fnsiqrrvfd .gt_spanner_row {
+#vqttbszcqi .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#fnsiqrrvfd .gt_group_heading {
+#vqttbszcqi .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -268,7 +284,7 @@ ul.task-list li input[type="checkbox"] {
   text-align: left;
 }
 
-#fnsiqrrvfd .gt_empty_group_heading {
+#vqttbszcqi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -283,15 +299,15 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 
-#fnsiqrrvfd .gt_from_md > :first-child {
+#vqttbszcqi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fnsiqrrvfd .gt_from_md > :last-child {
+#vqttbszcqi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fnsiqrrvfd .gt_row {
+#vqttbszcqi .gt_row {
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 5px;
@@ -310,7 +326,7 @@ ul.task-list li input[type="checkbox"] {
   overflow-x: hidden;
 }
 
-#fnsiqrrvfd .gt_stub {
+#vqttbszcqi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -323,7 +339,7 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#fnsiqrrvfd .gt_stub_row_group {
+#vqttbszcqi .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -337,15 +353,15 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: top;
 }
 
-#fnsiqrrvfd .gt_row_group_first td {
+#vqttbszcqi .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#fnsiqrrvfd .gt_row_group_first th {
+#vqttbszcqi .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#fnsiqrrvfd .gt_summary_row {
+#vqttbszcqi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -355,16 +371,16 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#fnsiqrrvfd .gt_first_summary_row {
+#vqttbszcqi .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_first_summary_row.thick {
+#vqttbszcqi .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#fnsiqrrvfd .gt_last_summary_row {
+#vqttbszcqi .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -374,7 +390,7 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_grand_summary_row {
+#vqttbszcqi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -384,7 +400,7 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#fnsiqrrvfd .gt_first_grand_summary_row {
+#vqttbszcqi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -394,7 +410,7 @@ ul.task-list li input[type="checkbox"] {
   border-top-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_last_grand_summary_row_top {
+#vqttbszcqi .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -404,11 +420,11 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_striped {
+#vqttbszcqi .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fnsiqrrvfd .gt_table_body {
+#vqttbszcqi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -417,7 +433,7 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_footnotes {
+#vqttbszcqi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -431,7 +447,7 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_footnote {
+#vqttbszcqi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -440,7 +456,7 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#fnsiqrrvfd .gt_sourcenotes {
+#vqttbszcqi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -454,7 +470,7 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#fnsiqrrvfd .gt_sourcenote {
+#vqttbszcqi .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -462,72 +478,72 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#fnsiqrrvfd .gt_left {
+#vqttbszcqi .gt_left {
   text-align: left;
 }
 
-#fnsiqrrvfd .gt_center {
+#vqttbszcqi .gt_center {
   text-align: center;
 }
 
-#fnsiqrrvfd .gt_right {
+#vqttbszcqi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fnsiqrrvfd .gt_font_normal {
+#vqttbszcqi .gt_font_normal {
   font-weight: normal;
 }
 
-#fnsiqrrvfd .gt_font_bold {
+#vqttbszcqi .gt_font_bold {
   font-weight: bold;
 }
 
-#fnsiqrrvfd .gt_font_italic {
+#vqttbszcqi .gt_font_italic {
   font-style: italic;
 }
 
-#fnsiqrrvfd .gt_super {
+#vqttbszcqi .gt_super {
   font-size: 65%;
 }
 
-#fnsiqrrvfd .gt_footnote_marks {
+#vqttbszcqi .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#fnsiqrrvfd .gt_asterisk {
+#vqttbszcqi .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#fnsiqrrvfd .gt_indent_1 {
+#vqttbszcqi .gt_indent_1 {
   text-indent: 5px;
 }
 
-#fnsiqrrvfd .gt_indent_2 {
+#vqttbszcqi .gt_indent_2 {
   text-indent: 10px;
 }
 
-#fnsiqrrvfd .gt_indent_3 {
+#vqttbszcqi .gt_indent_3 {
   text-indent: 15px;
 }
 
-#fnsiqrrvfd .gt_indent_4 {
+#vqttbszcqi .gt_indent_4 {
   text-indent: 20px;
 }
 
-#fnsiqrrvfd .gt_indent_5 {
+#vqttbszcqi .gt_indent_5 {
   text-indent: 25px;
 }
 
-#fnsiqrrvfd .katex-display {
+#vqttbszcqi .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#fnsiqrrvfd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#vqttbszcqi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -736,12 +752,12 @@ ul.task-list li input[type="checkbox"] {
 <td class="gt_row gt_center" headers="Opex stub_1_14 06 Nov – 12 Nov" style="text-indent: 20px">6,042,121</td>
 <td class="gt_row gt_center" headers="Opex stub_1_14 20 Nov – 26 Nov" style="text-indent: 20px">12,119,621</td>
 <td class="gt_row gt_center" headers="Opex stub_1_14 27 Nov – 03 Dec" style="text-indent: 20px">12,346,844</td>
-<td class="gt_row gt_center" headers="Opex stub_1_14 25 Dec – 31 Dec" style="text-indent: 20px">0</td>
+<td class="gt_row gt_center" headers="Opex stub_1_14 25 Dec – 31 Dec" style="text-indent: 20px">3,207,668</td>
 <td class="gt_row gt_center" headers="Opex stub_1_14 11 Dec – 17 Dec" style="text-indent: 20px">8,305,065</td>
 <td class="gt_row gt_center" headers="Opex stub_1_14 13 Nov – 19 Nov" style="text-indent: 20px">12,996,170</td>
 <td class="gt_row gt_center" headers="Opex stub_1_14 30 Oct – 05 Nov" style="text-indent: 20px">12,199,471</td>
 <td class="gt_row gt_center" headers="Opex stub_1_14 18 Dec – 24 Dec" style="text-indent: 20px">2,564,486</td>
-<td class="gt_row gt_center" headers="Opex stub_1_14 Total" style="text-indent: 20px">70,402,083</td>
+<td class="gt_row gt_center" headers="Opex stub_1_14 Total" style="text-indent: 20px">73,609,751</td>
 </tr>
 <tr class="odd">
 <th id="stub_1_15" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Salaries</th>
@@ -775,12 +791,12 @@ ul.task-list li input[type="checkbox"] {
 <td class="gt_row gt_center" headers="Opex stub_1_17 06 Nov – 12 Nov" style="background-color: #E5E9D9; font-weight: bold">7,637,694</td>
 <td class="gt_row gt_center" headers="Opex stub_1_17 20 Nov – 26 Nov" style="background-color: #E5E9D9; font-weight: bold">2,336,770</td>
 <td class="gt_row gt_center" headers="Opex stub_1_17 27 Nov – 03 Dec" style="background-color: #E5E9D9; font-weight: bold">62,425,853</td>
-<td class="gt_row gt_center" headers="Opex stub_1_17 25 Dec – 31 Dec" style="background-color: #E5E9D9; font-weight: bold">651,124</td>
+<td class="gt_row gt_center" headers="Opex stub_1_17 25 Dec – 31 Dec" style="background-color: #E5E9D9; font-weight: bold">3,858,792</td>
 <td class="gt_row gt_center" headers="Opex stub_1_17 11 Dec – 17 Dec" style="background-color: #E5E9D9; font-weight: bold">−11,686,026</td>
 <td class="gt_row gt_center" headers="Opex stub_1_17 13 Nov – 19 Nov" style="background-color: #E5E9D9; font-weight: bold">−16,229,805</td>
 <td class="gt_row gt_center" headers="Opex stub_1_17 30 Oct – 05 Nov" style="background-color: #E5E9D9; font-weight: bold">72,265,152</td>
 <td class="gt_row gt_center" headers="Opex stub_1_17 18 Dec – 24 Dec" style="background-color: #E5E9D9; font-weight: bold">−7,203,438</td>
-<td class="gt_row gt_center" headers="Opex stub_1_17 Total" style="background-color: #E5E9D9; font-weight: bold">95,519,247</td>
+<td class="gt_row gt_center" headers="Opex stub_1_17 Total" style="background-color: #E5E9D9; font-weight: bold">98,726,915</td>
 </tr>
 <tr class="gt_group_heading_row even">
 <th colspan="11" id="Uncategorized" class="gt_group_heading" data-quarto-table-cell-role="th" style="background-color: #EEF6FF; font-weight: bold" scope="colgroup">Uncategorized</th>
@@ -921,12 +937,12 @@ ul.task-list li input[type="checkbox"] {
 <td class="gt_row gt_center" headers="Uncategorized stub_1_28 06 Nov – 12 Nov" style="text-indent: 20px">−9,462,585</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_28 20 Nov – 26 Nov" style="text-indent: 20px">−7,879,148</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_28 27 Nov – 03 Dec" style="text-indent: 20px">−65,840,061</td>
-<td class="gt_row gt_center" headers="Uncategorized stub_1_28 25 Dec – 31 Dec" style="text-indent: 20px">−2,354,620</td>
+<td class="gt_row gt_center" headers="Uncategorized stub_1_28 25 Dec – 31 Dec" style="text-indent: 20px">−5,562,288</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_28 11 Dec – 17 Dec" style="text-indent: 20px">9,181,559</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_28 13 Nov – 19 Nov" style="text-indent: 20px">9,300,112</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_28 30 Oct – 05 Nov" style="text-indent: 20px">−72,376,321</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_28 18 Dec – 24 Dec" style="text-indent: 20px">2,601,367</td>
-<td class="gt_row gt_center" headers="Uncategorized stub_1_28 Total" style="text-indent: 20px">−124,352,145</td>
+<td class="gt_row gt_center" headers="Uncategorized stub_1_28 Total" style="text-indent: 20px">−127,559,813</td>
 </tr>
 <tr class="even">
 <th id="stub_1_29" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Category Total</th>
@@ -934,12 +950,12 @@ ul.task-list li input[type="checkbox"] {
 <td class="gt_row gt_center" headers="Uncategorized stub_1_29 06 Nov – 12 Nov" style="background-color: #E5E9D9; font-weight: bold">−8,879,491</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_29 20 Nov – 26 Nov" style="background-color: #E5E9D9; font-weight: bold">−7,666,674</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_29 27 Nov – 03 Dec" style="background-color: #E5E9D9; font-weight: bold">−65,374,851</td>
-<td class="gt_row gt_center" headers="Uncategorized stub_1_29 25 Dec – 31 Dec" style="background-color: #E5E9D9; font-weight: bold">−742,397</td>
+<td class="gt_row gt_center" headers="Uncategorized stub_1_29 25 Dec – 31 Dec" style="background-color: #E5E9D9; font-weight: bold">−3,950,065</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_29 11 Dec – 17 Dec" style="background-color: #E5E9D9; font-weight: bold">10,216,026</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_29 13 Nov – 19 Nov" style="background-color: #E5E9D9; font-weight: bold">9,723,624</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_29 30 Oct – 05 Nov" style="background-color: #E5E9D9; font-weight: bold">−72,355,052</td>
 <td class="gt_row gt_center" headers="Uncategorized stub_1_29 18 Dec – 24 Dec" style="background-color: #E5E9D9; font-weight: bold">2,701,512</td>
-<td class="gt_row gt_center" headers="Uncategorized stub_1_29 Total" style="background-color: #E5E9D9; font-weight: bold">−119,210,136</td>
+<td class="gt_row gt_center" headers="Uncategorized stub_1_29 Total" style="background-color: #E5E9D9; font-weight: bold">−122,417,804</td>
 </tr>
 <tr class="gt_group_heading_row odd">
 <th colspan="11" id="Grand Total" class="gt_group_heading" data-quarto-table-cell-role="th" style="background-color: #EEF6FF; font-weight: bold" scope="colgroup">Grand Total</th>
@@ -961,6 +977,23 @@ ul.task-list li input[type="checkbox"] {
 </table>
 
 </div>
+</div>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div>
+<div id="cfs-2" class="dashboard-page tab-pane grid-skip html-fill-item html-fill-container" data-orientation="rows" aria-labelledby="tab-cfs-2">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div class="card cell html-fill-item html-fill-container bslib-card" data-width="100%" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<div class="cell-output-display html-fill-item html-fill-container">
+<div class="reactable html-widget html-fill-item html-fill-container" id="htmlwidget-8730c27ec25154761994" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-8730c27ec25154761994">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Category":["Capex","Capex","Capex","Capex","Capex","Capex","Opex","Opex","Opex","Opex","Opex","Opex","Opex","Opex","Opex","Uncategorized","Uncategorized","Uncategorized","Uncategorized","Uncategorized","Uncategorized","Uncategorized","Uncategorized","Uncategorized","Uncategorized","Uncategorized","Capex","Opex","Uncategorized","Grand Total"],"Name":["A25_Diverse Production_Misc <10kEUR","A25_Lab equipment","A25_Post activation Finishing line installation - Phase 1","CAPEX to be classified","CWIP","Maintenance","A25_Lab equipment","A25_Post activation Finishing line installation - Phase 1","Diesel Payments","Fixed deposit","Maintenance","Purchases_Others","Purchases_Raw Material","Salaries","Utilities","Bank Charges","CWIP","Local Conveyance","Manpower","Plant & Machinery","Professional Fee","Staff Accomodation","Staff Welfare","Statutory Payments","Technical Service",null,"Category Total","Category Total","Category Total","Grand Total"],"04 Dec – 10 Dec":[137602,14372,892000,0,466936,0,0,3120,38974,-20000000,0,142931,3828305,1303093,5500,590,0,7083,600000,0,0,75600,0,6342,0,12477552,1510910,-14678077,13167167,0],"06 Nov – 12 Nov":[28234,0,1213563,0,0,0,0,0,0,0,2849,312480,6042121,1280244,0,0,0,0,400000,0,0,0,0,49248,133846,-9462585,1241797,7637694,-8879491,0],"20 Nov – 26 Nov":[12803,0,0,4570038,484956,262107,0,101952,39916,-10000000,3009,67272,12119621,0,5000,0,0,9050,127185,0,0,0,0,0,76239,-7879148,5329904,2336770,-7666674,0],"27 Nov – 03 Dec":[77169,0,8552,0,2863277,0,0,0,0,49999000,4248,75761,12346844,0,0,0,290000,14250,6000,0,0,0,10410,0,144550,-65840061,2948998,62425853,-65374851,0],"25 Dec – 31 Dec":[0,91273,0,0,0,0,0,0,0,0,8924,637200,3207668,0,5000,0,1451100,0,0,0,0,0,10323,0,150800,-5562288,91273,3858792,-3950065,0],"11 Dec – 17 Dec":[0,0,1470000,0,0,0,0,0,0,-20000000,8909,0,8305065,0,0,0,750000,15090,36947,0,11600,0,0,220830,0,9181559,1470000,-11686026,10216026,0],"13 Nov – 19 Nov":[0,0,1969313,36868,4500000,0,3906,237888,78889,-30000000,9051,439291,12996170,0,5000,7758.4,0,14650,0,0,11600,102100,7943,279461,0,9300111.6,6506181,-16229805,9723624,0],"30 Oct – 05 Nov":[0,0,89900,0,0,0,0,37760,0,60000000,27921,0,12199471,0,0,0,0,14360,0,0,0,0,6909,0,0,-72376321,89900,72265152,-72355052,0],"18 Dec – 24 Dec":[0,0,0,0,4500000,1926,12893,0,74839,-10000000,4027,50150,2564486,90167,0,0,0,20000,29222,40000,0,0,0,10923,0,2601367,4501926,-7203438,2701512,0],"Total":[255808,105645,5643328,4606906,12815169,264033,16799,380720,232618,19999000,68938,1725085,73609751,2673504,20500,8348.4,2491100,94483,1199354,40000,23200,177700,35585,566804,505435,-127559813.4,23690889,98726915,-122417804,0]},"columns":[{"id":"Category","name":"Category","type":"character","align":"center"},{"id":"Name","name":"Particulars","type":"character","align":"left","filterable":true,"cell":[{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["A25_Diverse Production_Misc <10kEUR"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["A25_Lab equipment"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["A25_Post activation Finishing line installation - Phase 1"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["CAPEX to be classified"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["CWIP"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Maintenance"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["A25_Lab equipment"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["A25_Post activation Finishing line installation - Phase 1"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Diesel Payments"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Fixed deposit"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Maintenance"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Purchases_Others"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Purchases_Raw Material"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Salaries"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Utilities"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Bank Charges"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["CWIP"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Local Conveyance"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Manpower"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Plant & Machinery"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Professional Fee"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Staff Accomodation"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Staff Welfare"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Statutory Payments"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["Technical Service"]},{"name":"div","attribs":{"style":{"padding-left":"20px"}},"children":["NA"]},{"name":"b","attribs":{},"children":["Category Total"]},{"name":"b","attribs":{},"children":["Category Total"]},{"name":"b","attribs":{},"children":["Category Total"]},{"name":"b","attribs":{},"children":["Grand Total"]}]},{"id":"04 Dec – 10 Dec","name":"04 Dec – 10 Dec","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}},{"id":"06 Nov – 12 Nov","name":"06 Nov – 12 Nov","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}},{"id":"20 Nov – 26 Nov","name":"20 Nov – 26 Nov","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}},{"id":"27 Nov – 03 Dec","name":"27 Nov – 03 Dec","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}},{"id":"25 Dec – 31 Dec","name":"25 Dec – 31 Dec","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}},{"id":"11 Dec – 17 Dec","name":"11 Dec – 17 Dec","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}},{"id":"13 Nov – 19 Nov","name":"13 Nov – 19 Nov","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}},{"id":"30 Oct – 05 Nov","name":"30 Oct – 05 Nov","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}},{"id":"18 Dec – 24 Dec","name":"18 Dec – 24 Dec","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}},{"id":"Total","name":"Total","type":"numeric","align":"center","filterable":true,"format":{"cell":{"digits":0,"separators":true},"aggregated":{"digits":0,"separators":true}}}],"groupBy":["Category"],"filterable":true,"highlight":true,"bordered":true,"rowStyle":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{"background":"#e5e9d9ff","fontWeight":"bold"},{"background":"#e5e9d9ff","fontWeight":"bold"},{"background":"#e5e9d9ff","fontWeight":"bold"},{"background":"#e9f2ff","fontWeight":"bold"}],"theme":{"style":{"fontSize":"12px"},"headerStyle":{"backgroundColor":"#f4f4f5ff","fontWeight":"bold"},"groupHeaderStyle":{"backgroundColor":"#eef6ff","fontWeight":"bold"}},"dataKey":"3c8a94602e0f7d73006078e970de6f8e"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":{"render":[{"code":"\nfunction(el) {\n\n  // ---- ADD HEADER ABOVE TABLE ----\n  const header = document.createElement('div');\n  header.innerHTML = `\n    <div style=\"\n      background-color:#c2d1e5ff;\n      text-align:center;\n      padding:6px 10px;\n      margin-bottom:4px;\n      border-radius:6px;\n      line-height:1.05;\n    \">\n      <div style=\"\n        font-weight:bold;\n        font-size:17px;\n        margin:0;\n      \">\n        Cash Flow Statement\n      <\/div>\n      <div style=\"\n        font-size:11px;\n        margin:0;\n      \">\n        Weekly Cash Movement\n      <\/div>\n    <\/div>\n  `;\n  el.parentNode.insertBefore(header, el);\n\n  // ---- ROBUST EXPAND-ALL LOGIC ----\n  let attempts = 0;\n  const maxAttempts = 20;\n\n  const interval = setInterval(() => {\n    const buttons = el.querySelectorAll(\n      '.rt-group-header button[aria-expanded=\"false\"]'\n    );\n\n    if (buttons.length > 0) {\n      buttons.forEach(btn => btn.click());\n      clearInterval(interval); // ✅ STOP once expanded\n    }\n\n    attempts++;\n    if (attempts >= maxAttempts) {\n      clearInterval(interval); // safety stop\n    }\n  }, 100);\n\n  // ---- RE-EXPAND AFTER FILTER / SEARCH ----\n  const observer = new MutationObserver(() => {\n    let retry = 0;\n    const refire = setInterval(() => {\n      const buttons = el.querySelectorAll(\n        '.rt-group-header button[aria-expanded=\"false\"]'\n      );\n\n      if (buttons.length > 0) {\n        buttons.forEach(btn => btn.click());\n        clearInterval(refire);\n      }\n\n      retry++;\n      if (retry > 10) clearInterval(refire);\n    }, 100);\n  });\n\n  observer.observe(el, {\n    childList: true,\n    subtree: true\n  });\n\n  // ---- REMOVE EXTRA TOP SPACE ----\n  el.style.marginTop = '0';\n  el.style.paddingTop = '0';\n}\n","data":null}]}}</script>
 </div>
 </div>
 <bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
