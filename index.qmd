@@ -106,14 +106,17 @@ library(gt)
 library(dplyr)
 library(readr)
 library(scales)
+library(lubridate)
+library(stringr)
 
-
+# -----------------------------
+# CLEAN DATA
+# -----------------------------
 pivot_data_clean <- pivot_data %>%
   mutate(
     Category = ifelse(is.na(Category) | Category == "", "Uncategorized", Category)
   ) %>%
   filter(!(Category == "Total" & Name == "Total"))
-
 
 week_cols <- pivot_data_clean %>%
   select(-Category, -Name) %>%
@@ -121,9 +124,211 @@ week_cols <- pivot_data_clean %>%
 
 week_cols <- setdiff(week_cols, "Total")
 
+fy_start_year <- as.integer(substr(unique(daybook$FY)[1], 1, 4))
+
+get_week_start <- function(week_label, fy_start_year) {
+  week_label <- str_replace_all(week_label, "–", "-")
+  start <- str_trim(str_split_fixed(week_label, "-", 2)[, 1])
+  d <- dmy(paste(start, fy_start_year))
+
+  if (!is.na(d) && month(d) %in% 1:3) {
+    d <- d %m+% years(1)
+  }
+  d
+}
+
+week_cols <- week_cols[
+  order(
+    sapply(week_cols, get_week_start, fy_start_year = fy_start_year),
+    decreasing = TRUE
+  )
+]
 
 pivot_data_clean <- pivot_data_clean %>%
+  select(Category, Name, all_of(week_cols), Total) %>%
   mutate(across(all_of(week_cols), ~ parse_number(as.character(.x))))
+
+# -----------------------------
+# CATEGORY TOTALS
+# -----------------------------
+category_totals <- pivot_data_clean %>%
+  group_by(Category) %>%
+  summarise(
+    across(all_of(week_cols), sum, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Total = rowSums(across(all_of(week_cols)), na.rm = TRUE),
+    Name  = "Category Total"
+  ) %>%
+  select(Category, Name, all_of(week_cols), Total)
+
+# -----------------------------
+# GRAND TOTAL
+# -----------------------------
+grand_total <- category_totals %>%
+  summarise(across(all_of(c(week_cols, "Total")), sum, na.rm = TRUE)) %>%
+  mutate(
+    Category = "Check Value",
+    Name     = "Check Value"
+  ) %>%
+  select(Category, Name, all_of(week_cols), Total)
+
+final_data <- bind_rows(
+  pivot_data_clean,
+  category_totals,
+  grand_total
+)
+
+# -----------------------------
+# GT TABLE
+# -----------------------------
+final_data %>%
+  gt(groupname_col = "Category", rowname_col = "Name") %>%
+
+  fmt_number(
+    columns  = all_of(c(week_cols, "Total")),
+    decimals = 0,
+    use_seps = TRUE
+  ) %>%
+
+  cols_label(
+    Name  = "Particulars",
+    Total = "Total"
+  ) %>%
+
+  cols_align("center", all_of(c(week_cols, "Total"))) %>%
+  cols_align("left", Name) %>%
+
+  tab_header(
+    title    = md("**Cash Flow Statement**"),
+    subtitle = md("Weekly Cash Movement")
+  ) %>%
+
+  # -----------------------------
+  # CATEGORY NAME (ROW GROUP HEADER) ✅ FIX
+  # -----------------------------
+  tab_style(
+    style = list(
+      cell_fill(color = "#e9f2ff"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_row_groups()
+  ) %>%
+
+  # -----------------------------
+  # NORMAL ROW INDENT
+  # -----------------------------
+  tab_style(
+    style = cell_text(indent = px(20)),
+    locations = cells_body(
+      rows = !Name %in% c("Category Total", "Check Value")
+    )
+  ) %>%
+
+  # -----------------------------
+  # CATEGORY TOTAL (ONLY THIS ROW)
+  # -----------------------------
+  tab_style(
+    style = list(
+      cell_fill(color = "#e5e9d9ff"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(rows = Name == "Category Total")
+  ) %>%
+
+  tab_style(
+    style = list(
+      cell_fill(color = "#e5e9d9ff"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_stub(rows = Name == "Category Total")
+  ) %>%
+
+  # -----------------------------
+  # GRAND TOTAL
+  # -----------------------------
+  tab_style(
+    style = list(
+      cell_fill(color = "#d6e4ff"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(rows = Name == "Check Value")
+  ) %>%
+
+  tab_style(
+    style = list(
+      cell_fill(color = "#d6e4ff"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_stub(rows = Name == "Check Value")
+  ) %>%
+
+  tab_options(
+    table.width      = pct(100),
+    table.font.size  = px(12),
+    data_row.padding = px(5)
+  )
+
+
+
+```
+<!-- 
+# CFS 2
+
+```{r}
+library(reactable)
+library(dplyr)
+library(scales)
+library(htmltools)
+library(htmlwidgets)
+library(stringr)
+library(lubridate)
+
+pivot_data_clean <- pivot_data %>%
+  mutate(
+    Category = ifelse(is.na(Category) | Category == "", "Uncategorized", Category)
+  ) %>%
+  filter(!(Category == "Total" & Name == "Total"))
+
+week_cols <- setdiff(
+  colnames(pivot_data_clean),
+  c("Category", "Name", "Total")
+)
+
+fy_start_year <- as.numeric(substr(unique(pivot_data$FY)[1], 1, 4))
+
+get_week_start_date <- function(labels) {
+
+  labels <- str_replace_all(labels, "–", "-")
+
+  start_days <- str_trim(str_split(labels, "-", simplify = TRUE)[, 1])
+
+  dates <- suppressWarnings(
+    as.Date(
+      paste(start_days, fy_start_year),
+      format = "%d %b %Y"
+    )
+  )
+
+  dates <- ifelse(
+    !is.na(dates) & month(dates) < 4,
+    dates %m+% years(1),
+    dates
+  )
+
+  as.Date(dates, origin = "1970-01-01")
+}
+
+week_order <- get_week_start_date(week_cols)
+
+week_cols <- week_cols[order(week_order, decreasing = TRUE)]
+
+pivot_data_clean <- pivot_data_clean %>%
+  select(Category, Name, all_of(week_cols), Total)
+
+pivot_data_clean <- pivot_data_clean %>%
+  mutate(across(all_of(week_cols), ~ as.numeric(replace_na(.x, 0))))
 
 category_totals <- pivot_data_clean %>%
   group_by(Category) %>%
@@ -134,155 +339,16 @@ category_totals <- pivot_data_clean %>%
   mutate(
     Total = rowSums(across(all_of(week_cols)), na.rm = TRUE),
     Name  = "Category Total"
-  )
-
-
-grand_total <- category_totals %>%
-  summarise(
-    across(all_of(c(week_cols, "Total")), sum, na.rm = TRUE)
   ) %>%
-  mutate(
-    Category = "Grand Total",
-    Name     = "Grand Total"
-  )
-
-
-final_data <- bind_rows(
-  pivot_data_clean,
-  category_totals,
-  grand_total
-)
-
-
-final_data %>%
-  gt(groupname_col = "Category", rowname_col = "Name") %>%
-  
-  # Number formatting
-  fmt_number(
-    columns  = all_of(c(week_cols, "Total")),
-    decimals = 0,
-    use_seps = TRUE
-  ) %>%
-  
-  cols_label(
-    Name  = "Particulars",
-    Total = "Total"
-  ) %>%
-  
-  cols_align("center", all_of(c(week_cols, "Total"))) %>%
-  cols_align("left", Name) %>%
-  
-  
-  tab_header(
-    title    = md("**Cash Flow Statement**"),
-    subtitle = md("Weekly Cash Movement")
-  ) %>%
-  
-  tab_style(
-    style = list(
-      cell_fill(color = "#c2d1e5ff"),
-      cell_text(weight = "bold", size = px(16))
-    ),
-    locations = cells_title(groups = "title")
-  ) %>%
-  
-  tab_style(
-    style = list(
-      cell_fill(color = "#c2d1e5ff"),
-      cell_text(size = px(12))
-    ),
-    locations = cells_title(groups = "subtitle")
-  ) %>%
-  
-  
-  tab_style(
-    style = list(
-      cell_fill(color = "#f4f4f5ff"),
-      cell_text(weight = "bold")
-    ),
-    locations = cells_column_labels(columns = all_of(c(week_cols, "Total")))
-  ) %>%
-  
-  
-  tab_style(
-    style = list(
-      cell_fill(color = "#eef6ff"),
-      cell_text(weight = "bold")
-    ),
-    locations = cells_group()
-  ) %>%
-  
-  
-  tab_style(
-    style = cell_text(indent = px(20)),
-    locations = cells_body(
-      rows = !Name %in% c("Category Total", "Grand Total")
-    )
-  ) %>%
-  
-  
-  tab_style(
-    style = list(
-      cell_fill(color = "#e5e9d9ff"),
-      cell_text(weight = "bold")
-    ),
-    locations = cells_body(rows = Name == "Category Total")
-  ) %>%
-  
-  
-  tab_style(
-    style = list(
-      cell_fill(color = "#e9f2ff"),
-      cell_text(weight = "bold")
-    ),
-    locations = cells_body(rows = Name == "Grand Total")
-  ) %>%
-  
-  
-  tab_options(
-    table.width      = pct(100),
-    table.font.size  = px(12),
-    data_row.padding = px(5)
-  )
-
-```
-
-# CFS 2
-
-```{r}
-#| width: 100%
-library(reactable)
-library(dplyr)
-library(scales)
-library(htmltools)
-library(htmlwidgets)
-
-# ---- Data preparation ----
-pivot_data_clean <- pivot_data %>%
-  mutate(
-    Category = ifelse(is.na(Category) | Category == "", "Uncategorized", Category)
-  ) %>%
-  filter(!(Category == "Total" & Name == "Total"))
-
-week_cols <- setdiff(colnames(pivot_data_clean), c("Category", "Name", "Total"))
-
-pivot_data_clean <- pivot_data_clean %>%
-  mutate(across(all_of(week_cols), as.numeric))
-
-category_totals <- pivot_data_clean %>%
-  group_by(Category) %>%
-  summarise(across(all_of(week_cols), sum, na.rm = TRUE), .groups = "drop") %>%
-  mutate(
-    Total = rowSums(across(all_of(week_cols)), na.rm = TRUE),
-    Name = "Category Total"
-  )
+  select(Category, Name, all_of(week_cols), Total)
 
 grand_total <- category_totals %>%
   summarise(across(all_of(c(week_cols, "Total")), sum, na.rm = TRUE)) %>%
   mutate(
-    Category = "Grand Total",
-    Name = "Grand Total"
-  )
+    Category = "Check Value",
+    Name     = "Check Value"
+  ) %>%
+  select(Category, Name, all_of(week_cols), Total)
 
 final_data <- bind_rows(
   pivot_data_clean,
@@ -290,156 +356,72 @@ final_data <- bind_rows(
   grand_total
 )
 
-# ---- Reactable with JS to expand groups ----
-htmlwidgets::onRender(
-  reactable(
-    final_data,
-    groupBy = "Category",
-    bordered = TRUE,
-    striped = FALSE,
-    highlight = TRUE,
-    filterable = TRUE,  # enable filters
-    defaultColDef = colDef(align = "center"),
+reactable(
+  final_data,
+  groupBy = "Category",
+  bordered = TRUE,
+  highlight = TRUE,
 
-    columns = c(
-      list(
-        Name = colDef(
-          name = "Particulars",
-          align = "left",
-          filterable = TRUE,
-          cell = function(value) {
-            if (value %in% c("Category Total", "Grand Total")) {
-              tags$b(value)
-            } else {
-              tags$div(style = "padding-left:20px;", value)
-            }
+  defaultColDef = colDef(
+    align = "center",
+    headerStyle = list(fontWeight = "bold")
+  ),
+
+  columns = c(
+    list(
+      Name = colDef(
+        name = "Particulars",
+        align = "left",
+        cell = function(value) {
+          if (!is.na(value) && value %in% c("Category Total", "Check Value")) {
+            tags$b(value)
+          } else {
+            tags$div(style = "padding-left:16px;", value)
           }
-        )
-      ),
-      lapply(
-        setNames(week_cols, week_cols),
-        function(col)
-          colDef(
-            format = colFormat(separators = TRUE, digits = 0),
-            filterable = TRUE
-          )
-      ),
-      list(
-        Total = colDef(
-          format = colFormat(separators = TRUE, digits = 0),
-          filterable = TRUE
-        )
+        }
       )
     ),
 
-    rowStyle = function(index) {
-      if (index > nrow(final_data)) return(NULL)
-      row <- final_data[index, ]
-      if (is.na(row$Name)) return(NULL)
+    lapply(
+      setNames(week_cols, week_cols),
+      function(col)
+        colDef(
+          format = colFormat(
+            separators = TRUE,
+            digits = 0
+          )
+        )
+    ),
 
-      if (row$Name == "Category Total") {
-        list(background = "#e5e9d9ff", fontWeight = "bold")
-      } else if (row$Name == "Grand Total") {
-        list(background = "#e9f2ff", fontWeight = "bold")
-      } else {
-        NULL
-      }
-    },
-
-    theme = reactableTheme(
-      style = list(fontSize = "12px"),
-      headerStyle = list(
-        backgroundColor = "#f4f4f5ff",
-        fontWeight = "bold"
-      ),
-      groupHeaderStyle = list(
-        backgroundColor = "#eef6ff",
-        fontWeight = "bold"
+    list(
+      Total = colDef(
+        format = colFormat(separators = TRUE, digits = 0)
       )
     )
   ),
-  JS("
-function(el) {
 
-  // ---- ADD HEADER ABOVE TABLE ----
-  const header = document.createElement('div');
-  header.innerHTML = `
-    <div style=\"
-      background-color:#c2d1e5ff;
-      text-align:center;
-      padding:6px 10px;
-      margin-bottom:4px;
-      border-radius:6px;
-      line-height:1.05;
-    \">
-      <div style=\"
-        font-weight:bold;
-        font-size:17px;
-        margin:0;
-      \">
-        Cash Flow Statement
-      </div>
-      <div style=\"
-        font-size:11px;
-        margin:0;
-      \">
-        Weekly Cash Movement
-      </div>
-    </div>
-  `;
-  el.parentNode.insertBefore(header, el);
+  rowStyle = function(index) {
+    row <- final_data[index, , drop = FALSE]
 
-  // ---- ROBUST EXPAND-ALL LOGIC ----
-  let attempts = 0;
-  const maxAttempts = 20;
+    if (is.na(row$Name)) return(NULL)
 
-  const interval = setInterval(() => {
-    const buttons = el.querySelectorAll(
-      '.rt-group-header button[aria-expanded=\"false\"]'
-    );
-
-    if (buttons.length > 0) {
-      buttons.forEach(btn => btn.click());
-      clearInterval(interval); // ✅ STOP once expanded
+    if (row$Name == "Category Total") {
+      list(background = "#f3f6e9", fontWeight = "bold")
+    } else if (row$Name == "Check Value") {
+      list(background = "#e9f2ff", fontWeight = "bold")
+    } else {
+      NULL
     }
+  },
 
-    attempts++;
-    if (attempts >= maxAttempts) {
-      clearInterval(interval); // safety stop
-    }
-  }, 100);
-
-  // ---- RE-EXPAND AFTER FILTER / SEARCH ----
-  const observer = new MutationObserver(() => {
-    let retry = 0;
-    const refire = setInterval(() => {
-      const buttons = el.querySelectorAll(
-        '.rt-group-header button[aria-expanded=\"false\"]'
-      );
-
-      if (buttons.length > 0) {
-        buttons.forEach(btn => btn.click());
-        clearInterval(refire);
-      }
-
-      retry++;
-      if (retry > 10) clearInterval(refire);
-    }, 100);
-  });
-
-  observer.observe(el, {
-    childList: true,
-    subtree: true
-  });
-
-  // ---- REMOVE EXTRA TOP SPACE ----
-  el.style.marginTop = '0';
-  el.style.paddingTop = '0';
-}
-")
-
-
-
+  theme = reactableTheme(
+    style = list(fontSize = "12px"),
+    headerStyle = list(backgroundColor = "#f7f7f7"),
+    groupHeaderStyle = list(backgroundColor = "#eef6ff")
+  )
 )
 
-```
+
+
+
+``` -->
